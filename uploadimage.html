@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gallery Upload Image</title>
+  <link rel="stylesheet" href="uimagestyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+</head>
+<body>
+  <h1>Uplaod Image</h1>
+  <form id="noticeForm" enctype="multipart/form-data">
+    <label for="imageUpload"></label>
+    <img id="uploaded-image" src="img/upload_image.png" alt="">
+    <input type="file" id="imageUpload" name="imageUpload" accept="image/*" onchange="previewImage(event)" multiple>
+    <br>
+    <label for="noticeTitle">About Image:</label>
+    <input type="text" id="noticeTitle" name="noticeTitle">
+    <br>
+    <label for="imageCategory">Category:</label>
+    <select id="imageCategory" name="imageCategory">
+    <option value="School">School</option>
+    <option value="Events">Events</option>
+    <option value="Acheivments">School's Acheivments</option>
+    <option value="food">Faculty</option>
+  <!-- Add more options as needed -->
+    </select>
+     <br>
+    <button type="submit">Upload Image To Gallery</button>
+  </form>
+
+  <script>
+
+    // Preview of Image
+    function previewImage(event) {
+      var reader = new FileReader();
+      reader.onload = function() {
+        var output = document.getElementById('uploaded-image');
+        output.src = reader.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // Add your JavaScript code here
+    const noticeForm = document.getElementById("noticeForm");
+    noticeForm.addEventListener("submit", handleFormSubmit);
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+
+      // Get the uploaded image file
+      const imageFile = document.getElementById("imageUpload").files[0];
+
+      // Get the notice title
+      const noticeTitle = document.getElementById("noticeTitle").value;
+
+      // Create a FormData object to send the data
+      const formData = new FormData();
+      formData.append("imageFile", imageFile);
+      formData.append("noticeTitle", noticeTitle);
+
+      // Send the form data to the server
+      // You can use AJAX or any other method to send the data to the server
+
+      // Example AJAX code using Fetch API
+      fetch("/uploadNotice", {
+        method: "POST",
+        body: formData,
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response from the server
+          console.log(data); // Example: display the response data
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the upload
+          console.error(error);
+        });
+    }
+  </script>
+</body>
+</html>
